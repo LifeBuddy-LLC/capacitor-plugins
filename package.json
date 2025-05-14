@@ -2,10 +2,8 @@
   "name": "@capacitor/screen-orientation",
   "version": "6.0.3",
   "description": "The Screen Orientation API provides methods to lock and unlock the screen orientation.",
-  "main": "dist/plugin.cjs.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "android/src/main/",
     "android/build.gradle",
