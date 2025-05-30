@@ -28,8 +28,8 @@ public class ScreenOrientation: NSObject {
 
     public func lock(_ orientationType: String, completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
-            let orientation = self.fromOrientationTypeToInt(orientationType)
-            self.capViewController?.supportedOrientations = [orientation]
+            let orientations = self.fromOrientationTypeToInt(orientationType)
+            self.capViewController?.supportedOrientations = orientations
             let mask = self.fromOrientationTypeToMask(orientationType)
             if #available(iOS 16.0, *) {
                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
@@ -84,7 +84,9 @@ public class ScreenOrientation: NSObject {
         switch orientationType {
         case "any":
             return UIInterfaceOrientationMask.all
-        case "landscape", "landscape-primary":
+        case "landscape":
+            return UIInterfaceOrientationMask.landscape
+        case "landscape-primary":
             // UIInterfaceOrientationMask.landscapeRight is the same as UIDeviceOrientation.landscapeLeft
             return UIInterfaceOrientationMask.landscapeRight
         case "landscape-secondary":
@@ -98,25 +100,27 @@ public class ScreenOrientation: NSObject {
         }
     }
 
-    private func fromOrientationTypeToInt(_ orientationType: String) -> Int {
+    private func fromOrientationTypeToInt(_ orientationType: String) -> [Int] {
         switch orientationType {
         case "any":
-            return UIInterfaceOrientation.unknown.rawValue
-        case "landscape", "landscape-primary":
+            return [UIInterfaceOrientation.unknown.rawValue]
+        case "landscape":
+            return [UIInterfaceOrientation.landscapeRight.rawValue, UIInterfaceOrientation.landscapeLeft.rawValue]
+        case "landscape-primary":
             // UIInterfaceOrientation.landscapeRight is the same as UIDeviceOrientation.landscapeLeft
             // @see https://developer.apple.com/documentation/uikit/uiinterfaceorientation/landscaperight
             // @see https://developer.apple.com/documentation/uikit/uideviceorientation/landscapeleft
-            return UIInterfaceOrientation.landscapeRight.rawValue
+            return [UIInterfaceOrientation.landscapeRight.rawValue]
         case "landscape-secondary":
             // UIInterfaceOrientation.landscapeLeft is the same as UIDeviceOrientation.landscapeRight
             // @see https://developer.apple.com/documentation/uikit/uiinterfaceorientation/landscapeleft
             // @see https://developer.apple.com/documentation/uikit/uideviceorientation/landscaperight
-            return UIInterfaceOrientation.landscapeLeft.rawValue
+            return [UIInterfaceOrientation.landscapeLeft.rawValue]
         case "portrait-secondary":
-            return UIInterfaceOrientation.portraitUpsideDown.rawValue
+            return [UIInterfaceOrientation.portraitUpsideDown.rawValue]
         default:
             // Case: portrait-primary
-            return UIInterfaceOrientation.portrait.rawValue
+            return [UIInterfaceOrientation.portrait.rawValue]
         }
     }
 
