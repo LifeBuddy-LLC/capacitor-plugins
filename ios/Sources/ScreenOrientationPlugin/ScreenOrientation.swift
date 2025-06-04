@@ -21,7 +21,7 @@ public class ScreenOrientation: NSObject {
         return fromDeviceOrientationToOrientationType(currentOrientation)
     }
 
-    private func lockLegacy(_ orientation: [Int]) {
+    private func lockLegacy(_ orientations: [Int]) {
         UIDevice.current.setValue(orientations.first, forKey: "orientation")
         UINavigationController.attemptRotationToDeviceOrientation()
     }
