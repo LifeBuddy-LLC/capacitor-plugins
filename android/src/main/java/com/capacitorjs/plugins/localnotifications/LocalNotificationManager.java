@@ -475,7 +475,7 @@ public class LocalNotificationManager {
             configureImageView(remoteViews, R.id.notification_right_image, notification.getRightImage());
             return remoteViews;
         } catch (Exception e) {
-            Logger.warn("Capacitor/LocalNotification", "Unable to create custom notification layout", e);
+            Logger.warn("Capacitor/LocalNotification", "Unable to create custom notification layout");
             return null;
         }
     }
