@@ -13,6 +13,9 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -52,6 +55,8 @@ public class LocalNotificationManager {
     private Activity activity;
     private NotificationStorage storage;
     private PluginConfig config;
+    private static final int CUSTOM_LAYOUT_COLLAPSED = R.layout.custom_notification_layout_collapsed;
+    private static final int CUSTOM_LAYOUT_EXPANDED = R.layout.custom_notification_layout_expanded;
 
     public LocalNotificationManager(NotificationStorage notificationStorage, Activity activity, Context context, CapConfig config) {
         storage = notificationStorage;
@@ -173,23 +178,27 @@ public class LocalNotificationManager {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setGroupSummary(localNotification.isGroupSummary());
 
-        if (localNotification.getLargeBody() != null) {
-            // support multiline text
-            mBuilder.setStyle(
-                new NotificationCompat.BigTextStyle()
-                    .bigText(localNotification.getLargeBody())
-                    .setSummaryText(localNotification.getSummaryText())
-            );
-        }
+        boolean appliedCustomLayout = applyCustomLayoutIfNeeded(mBuilder, localNotification);
 
-        if (localNotification.getInboxList() != null) {
-            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            for (String line : localNotification.getInboxList()) {
-                inboxStyle.addLine(line);
+        if (!appliedCustomLayout) {
+            if (localNotification.getLargeBody() != null) {
+                // support multiline text
+                mBuilder.setStyle(
+                    new NotificationCompat.BigTextStyle()
+                        .bigText(localNotification.getLargeBody())
+                        .setSummaryText(localNotification.getSummaryText())
+                );
             }
-            inboxStyle.setBigContentTitle(localNotification.getTitle());
-            inboxStyle.setSummaryText(localNotification.getSummaryText());
-            mBuilder.setStyle(inboxStyle);
+
+            if (localNotification.getInboxList() != null) {
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                for (String line : localNotification.getInboxList()) {
+                    inboxStyle.addLine(line);
+                }
+                inboxStyle.setBigContentTitle(localNotification.getTitle());
+                inboxStyle.setSummaryText(localNotification.getSummaryText());
+                mBuilder.setStyle(inboxStyle);
+            }
         }
 
         String sound = localNotification.getSound(context, getDefaultSound(context));
@@ -424,6 +433,87 @@ public class LocalNotificationManager {
     private void dismissVisibleNotification(int notificationId) {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.context);
         notificationManager.cancel(notificationId);
+    }
+
+    private boolean applyCustomLayoutIfNeeded(NotificationCompat.Builder builder, LocalNotification notification) {
+        if (!hasCustomLayout(notification)) {
+            return false;
+        }
+
+        RemoteViews collapsedView = createCustomRemoteView(CUSTOM_LAYOUT_COLLAPSED, notification);
+        RemoteViews expandedView = createCustomRemoteView(CUSTOM_LAYOUT_EXPANDED, notification);
+
+        if (collapsedView == null && expandedView == null) {
+            return false;
+        }
+
+        if (collapsedView != null) {
+            builder.setCustomContentView(collapsedView);
+        }
+        if (expandedView != null) {
+            builder.setCustomBigContentView(expandedView);
+        }
+
+        builder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+        return true;
+    }
+
+    private boolean hasCustomLayout(LocalNotification notification) {
+        return !TextUtils.isEmpty(notification.getLeftImage()) || !TextUtils.isEmpty(notification.getRightImage());
+    }
+
+    private RemoteViews createCustomRemoteView(int layoutResId, LocalNotification notification) {
+        if (layoutResId == 0) {
+            return null;
+        }
+
+        try {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), layoutResId);
+            setTextIfPresent(remoteViews, R.id.notification_title, notification.getTitle());
+            setTextIfPresent(remoteViews, R.id.notification_body, notification.getBody());
+            configureImageView(remoteViews, R.id.notification_left_image, notification.getLeftImage());
+            configureImageView(remoteViews, R.id.notification_right_image, notification.getRightImage());
+            return remoteViews;
+        } catch (Exception e) {
+            Logger.warn("Capacitor/LocalNotification", "Unable to create custom notification layout", e);
+            return null;
+        }
+    }
+
+    private void setTextIfPresent(RemoteViews remoteViews, int viewId, CharSequence text) {
+        if (remoteViews == null || viewId == 0) {
+            return;
+        }
+        try {
+            remoteViews.setTextViewText(viewId, text);
+        } catch (Exception ignored) {}
+    }
+
+    private void configureImageView(RemoteViews remoteViews, int viewId, String imageName) {
+        if (remoteViews == null || viewId == 0) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(imageName)) {
+            remoteViews.setViewVisibility(viewId, View.GONE);
+            return;
+        }
+
+        int imageResId = getImageResourceId(imageName);
+        if (imageResId != AssetUtil.RESOURCE_ID_ZERO_VALUE) {
+            remoteViews.setImageViewResource(viewId, imageResId);
+            remoteViews.setViewVisibility(viewId, View.VISIBLE);
+        } else {
+            remoteViews.setViewVisibility(viewId, View.GONE);
+        }
+    }
+
+    private int getImageResourceId(String imageName) {
+        int resId = AssetUtil.getResourceID(context, imageName, "drawable");
+        if (resId == AssetUtil.RESOURCE_ID_ZERO_VALUE) {
+            resId = AssetUtil.getResourceID(context, imageName, "mipmap");
+        }
+        return resId;
     }
 
     public boolean areNotificationsEnabled() {

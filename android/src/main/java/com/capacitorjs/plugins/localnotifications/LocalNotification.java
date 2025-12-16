@@ -41,6 +41,8 @@ public class LocalNotification {
     private LocalNotificationSchedule schedule;
     private String channelId;
     private String source;
+    private String leftImage;
+    private String rightImage;
 
     public String getTitle() {
         return title;
@@ -108,6 +110,22 @@ public class LocalNotification {
 
     public void setLargeIcon(String largeIcon) {
         this.largeIcon = AssetUtil.getResourceBaseName(largeIcon);
+    }
+
+    public String getLeftImage() {
+        return leftImage;
+    }
+
+    public void setLeftImage(String leftImage) {
+        this.leftImage = AssetUtil.getResourceBaseName(leftImage);
+    }
+
+    public String getRightImage() {
+        return rightImage;
+    }
+
+    public void setRightImage(String rightImage) {
+        this.rightImage = AssetUtil.getResourceBaseName(rightImage);
     }
 
     public void setInboxList(List<String> inboxList) {
@@ -260,6 +278,8 @@ public class LocalNotification {
         localNotification.setSmallIcon(jsonObject.getString("smallIcon"));
         localNotification.setLargeIcon(jsonObject.getString("largeIcon"));
         localNotification.setIconColor(jsonObject.getString("iconColor"));
+        localNotification.setLeftImage(jsonObject.getString("leftImage"));
+        localNotification.setRightImage(jsonObject.getString("rightImage"));
         localNotification.setAttachments(LocalNotificationAttachment.getAttachments(jsonObject));
         localNotification.setGroupSummary(jsonObject.getBoolean("groupSummary", false));
         localNotification.setChannelId(jsonObject.getString("channelId"));
@@ -386,6 +406,12 @@ public class LocalNotification {
             ", group='" +
             group +
             '\'' +
+            ", leftImage='" +
+            leftImage +
+            '\'' +
+            ", rightImage='" +
+            rightImage +
+            '\'' +
             ", extra=" +
             extra +
             ", attachments=" +
@@ -419,6 +445,8 @@ public class LocalNotification {
         if (iconColor != null ? !iconColor.equals(that.iconColor) : that.iconColor != null) return false;
         if (actionTypeId != null ? !actionTypeId.equals(that.actionTypeId) : that.actionTypeId != null) return false;
         if (group != null ? !group.equals(that.group) : that.group != null) return false;
+        if (leftImage != null ? !leftImage.equals(that.leftImage) : that.leftImage != null) return false;
+        if (rightImage != null ? !rightImage.equals(that.rightImage) : that.rightImage != null) return false;
         if (extra != null ? !extra.equals(that.extra) : that.extra != null) return false;
         if (attachments != null ? !attachments.equals(that.attachments) : that.attachments != null) return false;
         if (inboxList != null ? !inboxList.equals(that.inboxList) : that.inboxList != null) return false;
@@ -438,6 +466,8 @@ public class LocalNotification {
         result = 31 * result + (iconColor != null ? iconColor.hashCode() : 0);
         result = 31 * result + (actionTypeId != null ? actionTypeId.hashCode() : 0);
         result = 31 * result + (group != null ? group.hashCode() : 0);
+        result = 31 * result + (leftImage != null ? leftImage.hashCode() : 0);
+        result = 31 * result + (rightImage != null ? rightImage.hashCode() : 0);
         result = 31 * result + Boolean.hashCode(groupSummary);
         result = 31 * result + Boolean.hashCode(ongoing);
         result = 31 * result + Boolean.hashCode(autoCancel);

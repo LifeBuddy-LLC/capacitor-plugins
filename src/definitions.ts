@@ -533,6 +533,20 @@ export interface PendingLocalNotificationSchema {
    * @since 1.0.0
    */
   extra?: any;
+
+  /**
+   * Drawable resource name for the left-side image in the custom layout.
+   *
+   * Only available for Android.
+   */
+  leftImage?: string;
+
+  /**
+   * Drawable resource name for the right-side image in the custom layout.
+   *
+   * Only available for Android.
+   */
+  rightImage?: string;
 }
 
 export interface LocalNotificationSchema {
@@ -639,6 +653,20 @@ export interface LocalNotificationSchema {
    * @since 1.0.0
    */
   iconColor?: string;
+
+  /**
+   * Drawable resource name for the left-side image in the custom layout.
+   *
+   * Only available for Android.
+   */
+  leftImage?: string;
+
+  /**
+   * Drawable resource name for the right-side image in the custom layout.
+   *
+   * Only available for Android.
+   */
+  rightImage?: string;
 
   /**
    * Set attachments for this notification.
