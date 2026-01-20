@@ -43,6 +43,8 @@ public class LocalNotification {
     private String source;
     private String leftImage;
     private String rightImage;
+    private String leftImageSource;
+    private String rightImageSource;
 
     public String getTitle() {
         return title;
@@ -117,6 +119,7 @@ public class LocalNotification {
     }
 
     public void setLeftImage(String leftImage) {
+        this.leftImageSource = leftImage;
         this.leftImage = AssetUtil.getResourceBaseName(leftImage);
     }
 
@@ -125,7 +128,34 @@ public class LocalNotification {
     }
 
     public void setRightImage(String rightImage) {
+        this.rightImageSource = rightImage;
         this.rightImage = AssetUtil.getResourceBaseName(rightImage);
+    }
+
+    public String getAnimationLayoutName() {
+        String leftLayout = getLayoutNameFromSource(leftImageSource);
+        if (leftLayout != null) {
+            return leftLayout;
+        }
+        return getLayoutNameFromSource(rightImageSource);
+    }
+
+    private String getLayoutNameFromSource(String source) {
+        if (source == null) {
+            return null;
+        }
+        String trimmed = source.trim();
+        if (!trimmed.endsWith(".xml")) {
+            return null;
+        }
+        int slashIndex = trimmed.lastIndexOf('/');
+        if (slashIndex != -1 && slashIndex < trimmed.length() - 1) {
+            trimmed = trimmed.substring(slashIndex + 1);
+        }
+        if (trimmed.endsWith(".xml")) {
+            return trimmed.substring(0, trimmed.length() - 4);
+        }
+        return null;
     }
 
     public void setInboxList(List<String> inboxList) {

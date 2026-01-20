@@ -440,8 +440,14 @@ public class LocalNotificationManager {
             return false;
         }
 
-        RemoteViews collapsedView = createCustomRemoteView(CUSTOM_LAYOUT_COLLAPSED, notification);
-        RemoteViews expandedView = createCustomRemoteView(CUSTOM_LAYOUT_EXPANDED, notification);
+        String animationLayoutName = notification.getAnimationLayoutName();
+        int collapsedLayoutId = resolveCustomLayoutId(animationLayoutName, CUSTOM_LAYOUT_COLLAPSED, "collapsed");
+        int expandedLayoutId = resolveCustomLayoutId(animationLayoutName, CUSTOM_LAYOUT_EXPANDED, "expanded");
+        boolean collapsedIsStatic = collapsedLayoutId == CUSTOM_LAYOUT_COLLAPSED;
+        boolean expandedIsStatic = expandedLayoutId == CUSTOM_LAYOUT_EXPANDED;
+
+        RemoteViews collapsedView = createCustomRemoteView(collapsedLayoutId, notification, collapsedIsStatic);
+        RemoteViews expandedView = createCustomRemoteView(expandedLayoutId, notification, expandedIsStatic);
 
         if (collapsedView == null && expandedView == null) {
             return false;
@@ -462,7 +468,7 @@ public class LocalNotificationManager {
         return !TextUtils.isEmpty(notification.getLeftImage()) || !TextUtils.isEmpty(notification.getRightImage());
     }
 
-    private RemoteViews createCustomRemoteView(int layoutResId, LocalNotification notification) {
+    private RemoteViews createCustomRemoteView(int layoutResId, LocalNotification notification, boolean configureImages) {
         if (layoutResId == 0) {
             return null;
         }
@@ -471,12 +477,50 @@ public class LocalNotificationManager {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), layoutResId);
             setTextIfPresent(remoteViews, R.id.notification_title, notification.getTitle());
             setTextIfPresent(remoteViews, R.id.notification_body, notification.getBody());
-            configureImageView(remoteViews, R.id.notification_left_image, notification.getLeftImage());
-            configureImageView(remoteViews, R.id.notification_right_image, notification.getRightImage());
+            if (configureImages) {
+                configureImageView(remoteViews, R.id.notification_left_image, notification.getLeftImage());
+                configureImageView(remoteViews, R.id.notification_right_image, notification.getRightImage());
+            } else {
+                configureAnimationViews(remoteViews, notification);
+            }
             return remoteViews;
         } catch (Exception e) {
             Logger.warn("Capacitor/LocalNotification", "Unable to create custom notification layout");
             return null;
+        }
+    }
+
+    private int resolveCustomLayoutId(String animationLayoutName, int fallbackLayoutId, String variant) {
+        if (TextUtils.isEmpty(animationLayoutName)) {
+            return fallbackLayoutId;
+        }
+        String variantName = animationLayoutName + "_" + variant;
+        int layoutResId = AssetUtil.getResourceID(context, variantName, "layout");
+        if (layoutResId != AssetUtil.RESOURCE_ID_ZERO_VALUE) {
+            return layoutResId;
+        }
+        layoutResId = AssetUtil.getResourceID(context, animationLayoutName, "layout");
+        if (layoutResId != AssetUtil.RESOURCE_ID_ZERO_VALUE) {
+            return layoutResId;
+        }
+        return fallbackLayoutId;
+    }
+
+    private void configureAnimationViews(RemoteViews remoteViews, LocalNotification notification) {
+        if (remoteViews == null) {
+            return;
+        }
+        boolean hasLeft = !TextUtils.isEmpty(notification.getLeftImage());
+        boolean hasRight = !TextUtils.isEmpty(notification.getRightImage());
+        if (hasLeft && !hasRight) {
+            remoteViews.setViewVisibility(R.id.notification_left_animation, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.notification_right_animation, View.GONE);
+        } else if (hasRight && !hasLeft) {
+            remoteViews.setViewVisibility(R.id.notification_left_animation, View.GONE);
+            remoteViews.setViewVisibility(R.id.notification_right_animation, View.VISIBLE);
+        } else {
+            remoteViews.setViewVisibility(R.id.notification_left_animation, View.GONE);
+            remoteViews.setViewVisibility(R.id.notification_right_animation, View.GONE);
         }
     }
 
