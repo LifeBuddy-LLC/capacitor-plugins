@@ -1,0 +1,7 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/three_in_a_row_one_day">
+  <target
+    android:name="left_arm"
+    android:animation="@animator/rotate_arm"/>
+    
+</animated-vector>

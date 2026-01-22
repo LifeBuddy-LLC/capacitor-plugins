@@ -1,0 +1,10 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/today_decides_tomorrow">
+  <target
+    android:name="body"
+    android:animation="@animator/translate_down"/>
+    <target
+    android:name="arms"
+    android:animation="@animator/translate_down"/>
+    
+</animated-vector>

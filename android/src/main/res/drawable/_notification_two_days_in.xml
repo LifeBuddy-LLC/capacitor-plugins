@@ -1,0 +1,13 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/two_days_in">
+  <target
+    android:name="right_hand"
+    android:animation="@animator/rotate_movie_clapper_top"/>
+    <target
+    android:name="right_arm"
+    android:animation="@animator/rotate_movie_clapper_top"/>
+    <target
+    android:name="movie_clapper_top"
+    android:animation="@animator/rotate_movie_clapper_top"/>
+    
+</animated-vector>

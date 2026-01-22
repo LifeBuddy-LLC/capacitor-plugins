@@ -1,0 +1,7 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/dont_ghost_your_goals">
+    <target
+    android:name="right_upper_arm"
+    android:animation="@animator/rotate_clockwise_pause_30"/>
+    
+</animated-vector>

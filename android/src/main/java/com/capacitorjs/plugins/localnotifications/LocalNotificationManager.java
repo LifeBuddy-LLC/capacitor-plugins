@@ -440,7 +440,7 @@ public class LocalNotificationManager {
             return false;
         }
 
-        String animationLayoutName = notification.getAnimationLayoutName();
+        String animationLayoutName = resolveAnimationLayoutName(notification);
         int collapsedLayoutId = resolveCustomLayoutId(animationLayoutName, CUSTOM_LAYOUT_COLLAPSED, "collapsed");
         int expandedLayoutId = resolveCustomLayoutId(animationLayoutName, CUSTOM_LAYOUT_EXPANDED, "expanded");
         boolean collapsedIsStatic = collapsedLayoutId == CUSTOM_LAYOUT_COLLAPSED;
@@ -506,21 +506,63 @@ public class LocalNotificationManager {
         return fallbackLayoutId;
     }
 
+    private String resolveAnimationLayoutName(LocalNotification notification) {
+        String explicitName = notification.getAnimationLayoutName();
+        if (!TextUtils.isEmpty(explicitName)) {
+            return explicitName;
+        }
+
+        String leftName = normalizeLayoutCandidate(notification.getLeftImage());
+        if (hasAnimationLayout(leftName)) {
+            return leftName;
+        }
+
+        String rightName = normalizeLayoutCandidate(notification.getRightImage());
+        if (hasAnimationLayout(rightName)) {
+            return rightName;
+        }
+
+        return null;
+    }
+
+    private boolean hasAnimationLayout(String layoutName) {
+        if (TextUtils.isEmpty(layoutName)) {
+            return false;
+        }
+        String variantName = layoutName + "_collapsed";
+        int layoutResId = AssetUtil.getResourceID(context, variantName, "layout");
+        if (layoutResId != AssetUtil.RESOURCE_ID_ZERO_VALUE) {
+            return true;
+        }
+        layoutResId = AssetUtil.getResourceID(context, layoutName, "layout");
+        return layoutResId != AssetUtil.RESOURCE_ID_ZERO_VALUE;
+    }
+
+    private String normalizeLayoutCandidate(String name) {
+        if (TextUtils.isEmpty(name)) {
+            return null;
+        }
+        if (name.endsWith(".xml")) {
+            return name.substring(0, name.length() - 4);
+        }
+        return name;
+    }
+
     private void configureAnimationViews(RemoteViews remoteViews, LocalNotification notification) {
         if (remoteViews == null) {
             return;
         }
         boolean hasLeft = !TextUtils.isEmpty(notification.getLeftImage());
         boolean hasRight = !TextUtils.isEmpty(notification.getRightImage());
-        if (hasLeft && !hasRight) {
-            remoteViews.setViewVisibility(R.id.notification_left_animation, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.notification_right_animation, View.GONE);
-        } else if (hasRight && !hasLeft) {
-            remoteViews.setViewVisibility(R.id.notification_left_animation, View.GONE);
-            remoteViews.setViewVisibility(R.id.notification_right_animation, View.VISIBLE);
+        if (hasLeft) {
+            remoteViews.setViewVisibility(R.id.notification_left_image, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.notification_right_image, View.GONE);
+        } else if (hasRight) {
+            remoteViews.setViewVisibility(R.id.notification_left_image, View.GONE);
+            remoteViews.setViewVisibility(R.id.notification_right_image, View.VISIBLE);
         } else {
-            remoteViews.setViewVisibility(R.id.notification_left_animation, View.GONE);
-            remoteViews.setViewVisibility(R.id.notification_right_animation, View.GONE);
+            remoteViews.setViewVisibility(R.id.notification_left_image, View.GONE);
+            remoteViews.setViewVisibility(R.id.notification_right_image, View.GONE);
         }
     }
 

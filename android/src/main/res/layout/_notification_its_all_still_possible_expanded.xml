@@ -7,32 +7,30 @@
     android:padding="12dp">
 
     <ProgressBar
-        android:id="@+id/notification_left_animation"
+        android:id="@+id/notification_left_image"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="12dp"
         android:indeterminateBehavior="repeat"
-        android:indeterminateDrawable="@drawable/_widget_afterworkout_victory_mode_fg" />
+        android:indeterminateDrawable="@drawable/_notification_its_all_still_possible" />
 
     <ProgressBar
-        android:id="@+id/notification_right_animation"
+        android:id="@+id/notification_right_image"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="12dp"
         android:indeterminateBehavior="repeat"
-        android:indeterminateDrawable="@drawable/_widget_afterworkout_victory_mode_fg"
+        android:indeterminateDrawable="@drawable/_notification_its_all_still_possible"
         android:visibility="gone" />
 
     <include
         layout="@layout/custom_notification_base_expanded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/notification_left_animation"
-        android:layout_toStartOf="@id/notification_right_animation" />
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

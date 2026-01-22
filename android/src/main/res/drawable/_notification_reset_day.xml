@@ -1,0 +1,10 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/reset_day">
+  <target
+    android:name="all"
+    android:animation="@animator/move_x_in_out"/>
+    <target
+    android:name="all"
+    android:animation="@animator/brake_go"/>
+    
+</animated-vector>

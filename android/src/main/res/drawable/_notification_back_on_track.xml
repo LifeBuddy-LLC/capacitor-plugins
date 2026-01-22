@@ -1,0 +1,27 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/back_on_track">
+    <target
+    android:name="upper_body"
+    android:animation="@animator/rotate_body_clockwise"/>
+    <target
+    android:name="right_leg"
+    android:animation="@animator/grow_shrink_leg"/>
+    <target
+    android:name="right_leg"
+    android:animation="@animator/rotate_leg_clockwise"/>
+    <target
+    android:name="right_leg"
+    android:animation="@animator/translate_leg_down_up"/>
+
+    <target
+    android:name="left_foot"
+    android:animation="@animator/rotate_foot_clockwise"/>
+    <target
+    android:name="right_foot"
+    android:animation="@animator/rotate_foot_counterclockwise"/>
+    <target
+    android:name="right_foot"
+    android:animation="@animator/translate_foot_down_up"/>
+   
+    
+</animated-vector>
