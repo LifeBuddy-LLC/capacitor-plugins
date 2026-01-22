@@ -1,0 +1,10 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/this_is_the_first_step">
+    <target
+    android:name="body"
+    android:animation="@animator/rotate_body_counterclockwise"/>
+    <target
+    android:name="body"
+    android:animation="@animator/translate_body_right_up"/>
+    
+</animated-vector>

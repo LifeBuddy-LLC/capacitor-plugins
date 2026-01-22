@@ -119,8 +119,9 @@ public class LocalNotification {
     }
 
     public void setLeftImage(String leftImage) {
-        this.leftImageSource = leftImage;
-        this.leftImage = AssetUtil.getResourceBaseName(leftImage);
+        String normalized = normalizeImageSource(leftImage);
+        this.leftImageSource = normalized;
+        this.leftImage = AssetUtil.getResourceBaseName(normalized);
     }
 
     public String getRightImage() {
@@ -128,8 +129,9 @@ public class LocalNotification {
     }
 
     public void setRightImage(String rightImage) {
-        this.rightImageSource = rightImage;
-        this.rightImage = AssetUtil.getResourceBaseName(rightImage);
+        String normalized = normalizeImageSource(rightImage);
+        this.rightImageSource = normalized;
+        this.rightImage = AssetUtil.getResourceBaseName(normalized);
     }
 
     public String getAnimationLayoutName() {
@@ -156,6 +158,17 @@ public class LocalNotification {
             return trimmed.substring(0, trimmed.length() - 4);
         }
         return null;
+    }
+
+    private String normalizeImageSource(String source) {
+        if (source == null) {
+            return null;
+        }
+        String trimmed = source.trim();
+        if (trimmed.isEmpty() || "null".equalsIgnoreCase(trimmed)) {
+            return null;
+        }
+        return trimmed;
     }
 
     public void setInboxList(List<String> inboxList) {

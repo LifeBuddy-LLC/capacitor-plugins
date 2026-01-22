@@ -1,0 +1,9 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/streak_risk">
+  <target
+    android:name="right_pupil"
+    android:animation="@animator/grow_large"/>
+    <target
+    android:name="left_pupil"
+    android:animation="@animator/grow_large"/>
+</animated-vector>

@@ -1,0 +1,16 @@
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+  android:propertyName="rotation"
+  android:duration="5000"
+  android:repeatCount="infinite"
+  android:valueType="floatType">
+  <propertyValuesHolder android:propertyName="rotation">
+    <keyframe android:fraction="0" android:value="0" />
+    <keyframe android:fraction="0.325" android:value="0" />
+    <keyframe android:fraction="0.375" android:value="5" />
+    <keyframe android:fraction="0.4" android:value="0" />
+    <keyframe android:fraction="0.6" android:value="0" />
+    <!-- <keyframe android:fraction="0.65" android:value="-10" /> -->
+    <keyframe android:fraction="0.7" android:value="0" />
+    <keyframe android:fraction="1" android:value="0" />
+  </propertyValuesHolder>
+</objectAnimator>

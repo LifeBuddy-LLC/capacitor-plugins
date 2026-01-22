@@ -1,0 +1,21 @@
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+  android:duration="3000"
+  android:repeatCount="infinite"
+  android:valueType="floatType">
+  <propertyValuesHolder android:propertyName="scaleX">
+    <keyframe android:fraction="0" android:value="1" />
+    <!-- <keyframe android:fraction="0.01" android:value="1" /> -->
+    <keyframe android:fraction="0.3" android:value="1.03" />
+    <keyframe android:fraction="0.7" android:value="1.03" />
+    <!-- <keyframe android:fraction="0.99" android:value="1" /> -->
+    <keyframe android:fraction="1" android:value="1" />
+  </propertyValuesHolder>
+  <propertyValuesHolder android:propertyName="scaleY">
+    <keyframe android:fraction="0" android:value="1" />
+    <!-- <keyframe android:fraction="0.01" android:value="1" /> -->
+    <keyframe android:fraction="0.3" android:value="1.1" />
+    <keyframe android:fraction="0.7" android:value="1.1" />
+    <!-- <keyframe android:fraction="0.99" android:value="1" /> -->
+    <keyframe android:fraction="1" android:value="1" />
+  </propertyValuesHolder>
+</objectAnimator>

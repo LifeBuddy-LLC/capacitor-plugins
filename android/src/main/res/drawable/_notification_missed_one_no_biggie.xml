@@ -1,0 +1,10 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/missed_one_no_biggie">
+    <target
+    android:name="body"
+    android:animation="@animator/rotate_360"/>
+    <target
+    android:name="body2"
+    android:animation="@animator/shrink"/>
+    
+</animated-vector>

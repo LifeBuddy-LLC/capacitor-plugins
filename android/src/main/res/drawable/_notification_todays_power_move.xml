@@ -1,0 +1,13 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/todays_power_move">
+  <target
+    android:name="left_arm"
+    android:animation="@animator/rotate_arm_press"/>
+    <target
+    android:name="left_upper_arm_1"
+    android:animation="@animator/rotate_arm_press_reverse"/>
+    <target
+    android:name="left_upper_arm_2"
+    android:animation="@animator/rotate_arm_press_reverse"/>
+    
+</animated-vector>

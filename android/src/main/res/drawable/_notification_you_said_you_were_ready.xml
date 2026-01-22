@@ -1,0 +1,22 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/you_said_you_were_ready">
+   <target
+        android:name="right_eye_white"
+        android:animation="@animator/eye_blink" />
+    <target
+        android:name="left_eye_white"
+        android:animation="@animator/eye_blink" />
+    <target
+        android:name="right_pupil"
+        android:animation="@animator/eye_blink" />
+    <target
+        android:name="left_pupil"
+        android:animation="@animator/eye_blink" />
+    <target
+        android:name="left_eyelid"
+        android:animation="@animator/eyelids_blink" />
+    <target
+        android:name="right_eyelid"
+        android:animation="@animator/eyelids_blink" />
+    
+</animated-vector>

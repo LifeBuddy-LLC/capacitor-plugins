@@ -1,0 +1,22 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:drawable="@drawable/bounce_back_strong">
+    <target
+    android:name="upper_body"
+    android:animation="@animator/translate_down_up"/>
+    <target
+    android:name="legs"
+    android:animation="@animator/translate_down_up_1"/>
+    <target
+    android:name="legs"
+    android:animation="@animator/grow_shrink"/>
+    <target
+    android:name="left_foot"
+    android:animation="@animator/rotate_clockwise"/>
+    <target
+    android:name="right_foot"
+    android:animation="@animator/rotate_counterclockwise"/>
+    <target
+    android:name="feet"
+    android:animation="@animator/translate_down_up_2"/>
+    
+</animated-vector>

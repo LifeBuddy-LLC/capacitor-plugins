@@ -1,0 +1,14 @@
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+  android:duration="3000"
+  android:repeatCount="infinite"
+  android:valueType="floatType">
+  <propertyValuesHolder android:propertyName="translateY">
+    <keyframe android:fraction="0" android:value="500" />
+    <!-- <keyframe android:fraction="0.05" android:value="-10" /> -->
+    <keyframe android:fraction="0.2" android:value="100" />
+    <keyframe android:fraction="0.3" android:value="0" />
+    <keyframe android:fraction="0.7" android:value="0" />
+    <!-- <keyframe android:fraction="0.95" android:value="-10" /> -->
+    <keyframe android:fraction="1" android:value="-500" />
+  </propertyValuesHolder>
+</objectAnimator>

@@ -1,0 +1,14 @@
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+  android:propertyName="rotation"
+  android:duration="5000"
+  android:repeatCount="infinite"
+  android:valueType="floatType">
+  <propertyValuesHolder android:propertyName="rotation">
+    <keyframe android:fraction="0" android:value="0" />
+    <keyframe android:fraction="0.2" android:value="0" />
+    <keyframe android:fraction="0.4" android:value="50" />
+    <keyframe android:fraction="0.6" android:value="50" />
+    <keyframe android:fraction="0.8" android:value="0" />
+    <keyframe android:fraction="1" android:value="0" />
+  </propertyValuesHolder>
+</objectAnimator>
