@@ -239,17 +239,13 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
         let schedule = notification["schedule"] as? JSObject ?? [:]
         let content = UNMutableNotificationContent()
         content.title = NSString.localizedUserNotificationString(forKey: title, arguments: nil)
-        content.body = NSString.localizedUserNotificationString(forKey: body,
-                                                                arguments: nil)
+        content.body = NSString.localizedUserNotificationString(forKey: body, arguments: nil)
 
         content.userInfo = [
             "cap_extra": extra,
             "cap_schedule": schedule
         ]
 
-        if let actionTypeId = notification["actionTypeId"] as? String {
-            content.categoryIdentifier = actionTypeId
-        }
 
         if let threadIdentifier = notification["threadIdentifier"] as? String {
             content.threadIdentifier = threadIdentifier
@@ -548,11 +544,29 @@ public class LocalNotificationsPlugin: CAPPlugin, CAPBridgedPlugin {
      * Get the internal URL for the attachment URL
      */
     func makeAttachmentUrl(_ path: String) -> URL? {
-        guard let webURL = URL(string: path) else {
-            return nil
+        // If path starts with file://, treat as file URL
+        if path.hasPrefix("file://") {
+            return URL(string: path)
         }
-
-        return bridge?.localURL(fromWebURL: webURL)
+        // If path is a valid URL, try to convert to local URL
+        if let webURL = URL(string: path), webURL.scheme != nil {
+            return bridge?.localURL(fromWebURL: webURL)
+        }
+        // Otherwise, treat as a resource in the main bundle
+        let fileName = (path as NSString).deletingPathExtension
+        let fileExt = (path as NSString).pathExtension
+        // Try at root of bundle
+        if let bundleURL = Bundle.main.url(forResource: fileName, withExtension: fileExt) {
+            return bundleURL
+        }
+        // Try inside notification_images subfolder
+        let subfolderPath = "notification_images/" + (path as NSString).lastPathComponent
+        let subfolderFileName = (subfolderPath as NSString).deletingPathExtension
+        let subfolderFileExt = (subfolderPath as NSString).pathExtension
+        if let bundleURL = Bundle.main.url(forResource: subfolderFileName, withExtension: subfolderFileExt) {
+            return bundleURL
+        }
+        return nil
     }
 
     /**
